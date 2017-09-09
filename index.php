@@ -5,6 +5,7 @@ require_once __DIR__ . '/vendor/autoload.php';
 require_once __DIR__ . '/lineBasicFuncions.php';
 require_once __DIR__ . '/dbConnection.php';
 require_once __DIR__ . '/userdb.php';
+require_once __DIR__ . '/oumu.php';
 
 /* 最初のおまじない */
 // アクセストークンを使いCurlHTTPClientをインスタンス化
@@ -31,19 +32,23 @@ try {
 /*  ユーザへのアクション */
 // 配列に格納された各イベントをループで処理
 foreach ($events as $event) {
-  $state = getStateByUserId($event->getUserId());
   // ユーザーの情報がデータベースに存在しない時
-  if($state === PDO::PARAM_NULL) {
+  if(getStateByUserId($event->getUserId()) === PDO::PARAM_NULL) {
     $state = array('talkMode' => 'normal');
     // ユーザーをデータベースに登録
     registerUser($event->getUserId(), json_encode($state));
     if ($event instanceof \LINE\LINEBot\Event\MessageEvent\TextMessage) {
-      $bot->replyText($event->getReplyToken(), '初めまして。今の会話は通常モードです。今は[オウム]モードがあります。');
+      $bot->replyText($event->getReplyToken(), '初めまして。今の会話は通常モードです。今は[通常,オウム]モードがあります。');
       continue;
     }
   }else{
     //指定の言葉でトークモードの変更
     if(strpos($event->getText(),'変え')){
+      if(strpos($event->getText(),'通常')){
+        updateUser($event->getUserId(), 'normal');
+        $bot->replyText($event->getReplyToken(), '[通常]モードに変更しました。');
+        continue;//ブレイクがまずいかも
+      }
       if(strpos($event->getText(),'オウム')){
         updateUser($event->getUserId(), 'oumu');
         $bot->replyText($event->getReplyToken(), '[オウム]モードに変更しました。');
@@ -51,13 +56,14 @@ foreach ($events as $event) {
       }
     }
   }
+  $state = getStateByUserId($event->getUserId());
   //オウム返し
   if(strpos($state['talkMode'],'oumu')){
     oumu($event,$bot);
     continue;
   }
 
-  
+
 
 }
 
