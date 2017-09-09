@@ -4,7 +4,7 @@
 require_once __DIR__ . '/vendor/autoload.php';
 require_once __DIR__ . '/lineBasicFuncions.php';
 require_once __DIR__ . '/dbConnection.php';
-require_once __DIR__ . '/userDb.php';
+require_once __DIR__ . '/userdb.php';
 
 /* 最初のおまじない */
 // アクセストークンを使いCurlHTTPClientをインスタンス化
