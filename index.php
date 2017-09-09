@@ -43,7 +43,7 @@ foreach ($events as $event) {
       continue;
     }
   }else{
-    error_log('debag:user');
+    error_log('debag:user' . $event->getText());
     //指定の言葉でトークモードの変更
     if(strpos($event->getText(),'変え')){
       if(strpos($event->getText(),'通常')){
