@@ -38,22 +38,23 @@ foreach ($events as $event) {
     // ユーザーをデータベースに登録
     registerUser($event->getUserId(), json_encode($state));
     if ($event instanceof \LINE\LINEBot\Event\MessageEvent\TextMessage) {
-      $bot->replyText($event->getReplyToken(), '初めまして。今の会話は通常モードです。');
+      $bot->replyText($event->getReplyToken(), '初めまして。今の会話は通常モードです。今は[オウム]モードがあります。');
       continue;
     }
   }else{
-    // MessageEventクラスのインスタンスでなければ処理をスキップ
-    if (!($event instanceof \LINE\LINEBot\Event\MessageEvent)) {
-      error_log('Non message event has come');
-      continue;
+    //指定の言葉でトークモードの変更
+    if(strpos($event->getText(),'変え')){
+      if(strpos($event->getText(),'オウム')){
+        updateUser($event->getUserId(), 'oumu');
+        $bot->replyText($event->getReplyToken(), '[オウム]モードに変更しました。');
+        break;//ブレイクがまずいかも
+      }
     }
-    // TextMessageクラスのインスタンスでなければ処理をスキップ
-    if (!($event instanceof \LINE\LINEBot\Event\MessageEvent\TextMessage)) {
-      error_log('Non text message has come');
-      continue;
-    }
-    // オウム返し
-    $bot->replyText($event->getReplyToken(), $event->getText());
+  }
+  //オウム返し
+  if(strpos($state['talkMode'],'oumu')){
+    oumu($event,$bot);
+    continue;
   }
 
 
