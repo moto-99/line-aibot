@@ -34,6 +34,7 @@ try {
 foreach ($events as $event) {
   // ユーザーの情報がデータベースに存在しない時
   if(getStateByUserId($event->getUserId()) === PDO::PARAM_NULL) {
+    error_log('debag:first user');
     $state = array('talkMode' => 'normal');
     // ユーザーをデータベースに登録
     registerUser($event->getUserId(), json_encode($state));
@@ -42,14 +43,17 @@ foreach ($events as $event) {
       continue;
     }
   }else{
+    error_log('debag:user');
     //指定の言葉でトークモードの変更
     if(strpos($event->getText(),'変え')){
       if(strpos($event->getText(),'通常')){
+        error_log('debag:user change normal');
         updateUser($event->getUserId(), 'normal');
         $bot->replyText($event->getReplyToken(), '[通常]モードに変更しました。');
         continue;//ブレイクがまずいかも
       }
       if(strpos($event->getText(),'オウム')){
+        error_log('debag:user change oumu');
         updateUser($event->getUserId(), 'oumu');
         $bot->replyText($event->getReplyToken(), '[オウム]モードに変更しました。');
         continue;//ブレイクがまずいかも
@@ -59,6 +63,7 @@ foreach ($events as $event) {
   $state = getStateByUserId($event->getUserId());
   //オウム返し
   if(strpos($state->{'talkMode'},'oumu')){
+    error_log('debag:oumu mode run');
     oumu($event,$bot);
     continue;
   }
