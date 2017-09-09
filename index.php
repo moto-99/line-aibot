@@ -15,11 +15,8 @@ $signature = $_SERVER['HTTP_' . \LINE\LINEBot\Constant\HTTPHeader::LINE_SIGNATUR
 $events = $bot->parseEventRequest(file_get_contents('php://input'), $signature);
 // 配列に格納された各イベントをループで処理
 foreach ($events as $event) {
-  // イベントがPostbackEventクラスのインスタンスであれば
-  if ($event instanceof \LINE\LINEBot\Event\PostbackEvent) {
-    // テキストを返信し次のイベントの処理へ
-    replyTextMessage($bot, $event->getReplyToken(), 'TextMessage');
-  }
+  // テキストを返信し次のイベントの処理へ
+  replyTextMessage($bot, $event->getReplyToken(), 'TextMessage');
 }
 
 
