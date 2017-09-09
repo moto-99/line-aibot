@@ -34,7 +34,7 @@ foreach ($events as $event) {
   $state = getStateByUserId($event->getUserId());
   // ユーザーの情報がデータベースに存在しない時
   if($state === PDO::PARAM_NULL) {
-    $state = {'talkMode': 'normal'}
+    $state = array('talkMode' => 'normal');
     // ユーザーをデータベースに登録
     registerUser($event->getUserId(), json_encode($state));
     if ($event instanceof \LINE\LINEBot\Event\MessageEvent\TextMessage) {
