@@ -45,14 +45,15 @@ foreach ($events as $event) {
   }else{
     error_log('debag:user' . $event->getText());
     //指定の言葉でトークモードの変更
-    if(strpos($event->getText(),'変え')){
-      if(strpos($event->getText(),'通常')){
+    if(strpos($event->getText(),'変え') !== False){
+      error_log('debag:mode change');
+      if(strpos($event->getText(),'通常') !== False){
         error_log('debag:user change normal');
         updateUser($event->getUserId(), 'normal');
         $bot->replyText($event->getReplyToken(), '[通常]モードに変更しました。');
         continue;//ブレイクがまずいかも
       }
-      if(strpos($event->getText(),'オウム')){
+      if(strpos($event->getText(),'オウム') !== False){
         error_log('debag:user change oumu');
         updateUser($event->getUserId(), 'oumu');
         $bot->replyText($event->getReplyToken(), '[オウム]モードに変更しました。');
@@ -62,7 +63,7 @@ foreach ($events as $event) {
   }
   $state = getStateByUserId($event->getUserId());
   //オウム返し
-  if(strpos($state->{'talkMode'},'oumu')){
+  if(strpos($state->{'talkMode'},'oumu') !== False){
     error_log('debag:oumu mode run');
     oumu($event,$bot);
     continue;
