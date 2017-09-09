@@ -65,7 +65,7 @@ foreach ($events as $event) {
   /* stateによって機能の切り替え*/
   $state = getStateByUserId($event->getUserId());
   // 通常モード
-  if(strpos($state->{'talkMode'},'oumu') !== False){
+  if(strpos($state->{'talkMode'},'normal') !== False){
     if ($event instanceof \LINE\LINEBot\Event\MessageEvent\TextMessage) {
       $bot->replyText($event->getReplyToken(), '今の会話は通常モードです。今は[通常,オウム]モードがあります。');
       continue;
