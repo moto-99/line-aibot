@@ -3,6 +3,8 @@
 //Composerでインストールしたライブラリを一括読み込み
 require_once __DIR__ . '/vendor/autoload.php';
 require_once __DIR__ . '/lineBasicFuncions.php';
+require_once __DIR__ . '/dbConnection.php';
+require_once __DIR__ . '/userDb.php';
 
 /* 最初のおまじない */
 // アクセストークンを使いCurlHTTPClientをインスタンス化
@@ -29,18 +31,32 @@ try {
 /*  ユーザへのアクション */
 // 配列に格納された各イベントをループで処理
 foreach ($events as $event) {
-  // MessageEventクラスのインスタンスでなければ処理をスキップ
-  if (!($event instanceof \LINE\LINEBot\Event\MessageEvent)) {
-    error_log('Non message event has come');
-    continue;
+  $state = getStateByUserId($event->getUserId())
+  // ユーザーの情報がデータベースに存在しない時
+  if($state === PDO::PARAM_NULL) {
+    $state = {'talkMode': 'normal'}
+    // ユーザーをデータベースに登録
+    registerUser($event->getUserId(), json_encode($state));
+    if ($event instanceof \LINE\LINEBot\Event\MessageEvent\TextMessage) {
+      $bot->replyText($event->getReplyToken(), '初めまして。今の会話は通常モードです。');
+      continue;
+    }
+  }else{
+    // MessageEventクラスのインスタンスでなければ処理をスキップ
+    if (!($event instanceof \LINE\LINEBot\Event\MessageEvent)) {
+      error_log('Non message event has come');
+      continue;
+    }
+    // TextMessageクラスのインスタンスでなければ処理をスキップ
+    if (!($event instanceof \LINE\LINEBot\Event\MessageEvent\TextMessage)) {
+      error_log('Non text message has come');
+      continue;
+    }
+    // オウム返し
+    $bot->replyText($event->getReplyToken(), $event->getText());
   }
-  // TextMessageクラスのインスタンスでなければ処理をスキップ
-  if (!($event instanceof \LINE\LINEBot\Event\MessageEvent\TextMessage)) {
-    error_log('Non text message has come');
-    continue;
-  }
-  // オウム返し
-  $bot->replyText($event->getReplyToken(), $event->getText());
+
+
 }
 
 
