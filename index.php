@@ -2,7 +2,7 @@
 
 //Composerでインストールしたライブラリを一括読み込み
 require_once __DIR__ . '/vendor/autoload.php';
-require_once 'lineBasicFuncions.php';
+require_once __DIR__ . 'lineBasicFuncions.php';
 
 // アクセストークンを使いCurlHTTPClientをインスタンス化
 $httpClient = new \LINE\LINEBot\HTTPClient\CurlHTTPClient(getenv('CHANNEL_ACCESS_TOKEN'));
@@ -19,7 +19,6 @@ foreach ($events as $event) {
   if ($event instanceof \LINE\LINEBot\Event\PostbackEvent) {
     // テキストを返信し次のイベントの処理へ
     replyTextMessage($bot, $event->getReplyToken(), 'TextMessage');
-    continue;
   }
 }
 
