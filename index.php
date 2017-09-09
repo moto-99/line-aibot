@@ -58,7 +58,7 @@ foreach ($events as $event) {
   }
   $state = getStateByUserId($event->getUserId());
   //オウム返し
-  if(strpos($state['talkMode'],'oumu')){
+  if(strpos($state->{'talkMode'},'oumu')){
     oumu($event,$bot);
     continue;
   }
