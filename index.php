@@ -47,7 +47,7 @@ foreach ($events as $event) {
       if(strpos($event->getText(),'オウム')){
         updateUser($event->getUserId(), 'oumu');
         $bot->replyText($event->getReplyToken(), '[オウム]モードに変更しました。');
-        break;//ブレイクがまずいかも
+        continue;//ブレイクがまずいかも
       }
     }
   }
@@ -57,6 +57,7 @@ foreach ($events as $event) {
     continue;
   }
 
+  
 
 }
 
