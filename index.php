@@ -31,7 +31,7 @@ try {
 /*  ユーザへのアクション */
 // 配列に格納された各イベントをループで処理
 foreach ($events as $event) {
-  $state = getStateByUserId($event->getUserId())
+  $state = getStateByUserId($event->getUserId());
   // ユーザーの情報がデータベースに存在しない時
   if($state === PDO::PARAM_NULL) {
     $state = {'talkMode': 'normal'}
