@@ -1,4 +1,5 @@
 <?php
+
 // テキストを返信。引数はLINEBot、返信先、テキスト
 function replyTextMessage($bot, $replyToken, $text) {
   // 返信を行いレスポンスを取得
