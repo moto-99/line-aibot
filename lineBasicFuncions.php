@@ -6,7 +6,7 @@ function replyTextMessage($bot,$replyToken,$text){
   //error
   if(!$response -> isSucceeded()){
     //エラー表示
-    eroor_log('Failed! '. $response->getHTTPStatus) . ' ' . $response->getRawBody());
+    eroor_log('Failed! '. $response->getHTTPStatus . ' ' . $response->getRawBody());
   }
 }
 
