@@ -49,13 +49,13 @@ foreach ($events as $event) {
       error_log('debag:mode change');
       if(strpos($event->getText(),'通常') !== False){
         error_log('debag:user change normal');
-        updateUser($event->getUserId(), 'normal');
+        updateUser($event->getUserId(), json_encode(array('talkMode' => 'normal')));
         $bot->replyText($event->getReplyToken(), '[通常]モードに変更しました。');
         continue;//ブレイクがまずいかも
       }
       if(strpos($event->getText(),'オウム') !== False){
         error_log('debag:user change oumu');
-        updateUser($event->getUserId(), 'oumu');
+        updateUser($event->getUserId(), json_encode(array('talkMode' => 'oumu')));
         $bot->replyText($event->getReplyToken(), '[オウム]モードに変更しました。');
         continue;//ブレイクがまずいかも
       }
