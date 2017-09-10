@@ -62,7 +62,7 @@ foreach ($events as $event) {
       //python lib check 隠しコマンド
       if(strpos($event->getText(),'python') !== False){
         error_log('debag:user change python lib check');
-        exec('heroku/python ' . __DIR__ . '/pythonLib_checker.py', $outpara);//python 呼び出し
+        exec('python ' . __DIR__ . '/pythonLib_checker.py', $outpara);//python 呼び出し
         error_log('python lib:'. $outpara);
         $bot->replyText($event->getReplyToken(), 'pythonライブラリを表示します。'. $outpara);
         continue;//ブレイクがまずいかも
