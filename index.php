@@ -51,22 +51,23 @@ foreach ($events as $event) {
         error_log('debag:user change normal');
         updateUser($event->getUserId(), json_encode(array('talkMode' => 'normal')));
         $bot->replyText($event->getReplyToken(), '[通常]モードに変更しました。');
-        continue;//ブレイクがまずいかも
+        continue;
       }
+      //オウムモードに変更
       if(strpos($event->getText(),'オウム') !== False){
         error_log('debag:user change oumu');
         updateUser($event->getUserId(), json_encode(array('talkMode' => 'oumu')));
         $bot->replyText($event->getReplyToken(), '[オウム]モードに変更しました。');
-        continue;//ブレイクがまずいかも
+        continue;
       }
-      //python lib check 隠しコマンド
-      if(strpos($event->getText(),'python') !== False){
-        error_log('debag:user change python lib check');
-        exec('python ' . __DIR__ . '/pythonLib_checker.py', $outpara);//python 呼び出し
-        error_log( $outpara[0]);
-        $bot->replyText($event->getReplyToken(), 'pythonライブラリを表示します。'. $outpara[0]);
-        continue;//ブレイクがまずいかも
-      }
+    }
+    //python lib check 隠しコマンド
+    if(strpos($event->getText(),'python') !== False){
+      error_log('debag:user change python lib check');
+      exec('python ' . __DIR__ . '/pythonLib_checker.py', $outpara);//python 呼び出し
+      error_log( $outpara[0]);//print した順に入っている。今回はprint一個。
+      $bot->replyText($event->getReplyToken(), 'pythonライブラリをログに表示します。字数制限で送信はできません。');
+      continue;
     }
   }
 
