@@ -6,6 +6,7 @@ require_once __DIR__ . '/lineBasicFuncions.php';
 require_once __DIR__ . '/dbConnection.php';
 require_once __DIR__ . '/userdb.php';
 require_once __DIR__ . '/oumu.php';
+require_once __DIR__ . '/coffee_memo.php';
 
 /* 最初のおまじない */
 // アクセストークンを使いCurlHTTPClientをインスタンス化
