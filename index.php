@@ -39,7 +39,7 @@ foreach ($events as $event) {
     // ユーザーをデータベースに登録
     registerUser($event->getUserId(), json_encode($state));
     if ($event instanceof \LINE\LINEBot\Event\MessageEvent\TextMessage) {
-      $bot->replyText($event->getReplyToken(), '初めまして。今の会話は通常モードです。今は[通常,オウム]モードがあります。');
+      $bot->replyText($event->getReplyToken(), '初めまして。今の会話は通常モードです。今は[通常,オウム,コーヒーメモ]モードがあります。');
       continue;
     }
   }else{
@@ -60,6 +60,20 @@ foreach ($events as $event) {
         $bot->replyText($event->getReplyToken(), '[オウム]モードに変更しました。');
         continue;
       }
+      //コーヒーメモモードに変更
+      if(strpos($event->getText(),'コーヒーメモ') !== False){
+        if(strpos($event->getText(),'検索') !== False){
+          error_log('debag:user change coffee_memo_search');
+          updateUser($event->getUserId(), json_encode(array('talkMode' => 'coffee_memo_search')));
+          $bot->replyText($event->getReplyToken(), '[コーヒーメモ - 検索]モードに変更しました。');
+          continue;
+        } else {
+          error_log('debag:user change coffee_memo_register');
+          updateUser($event->getUserId(), json_encode(array('talkMode' => 'coffee_memo_register')));
+          $bot->replyText($event->getReplyToken(), '[コーヒーメモ - 登録]モードに変更しました。');
+          continue;
+        }
+      }
     }
     //python lib check 隠しコマンド
     if(strpos($event->getText(),'python') !== False){
@@ -76,7 +90,7 @@ foreach ($events as $event) {
   // 通常モード
   if(strpos($state->{'talkMode'},'normal') !== False){
     if ($event instanceof \LINE\LINEBot\Event\MessageEvent\TextMessage) {
-      $bot->replyText($event->getReplyToken(), '今の会話は通常モードです。今は[通常,オウム]モードがあります。');
+      $bot->replyText($event->getReplyToken(), '今の会話は通常モードです。今は[通常,オウム,コーヒーメモ]モードがあります。');
       continue;
     }
   }
@@ -88,7 +102,18 @@ foreach ($events as $event) {
     continue;
   }
 
-
+  //コーヒーメモモード
+  if(strpos($state->{'talkMode'},'coffee_memo_register') !== False){
+    error_log('debag:coffee_memo mode run');
+    coffeeMemoRegister($event,$bot);
+    continue;
+  }
+  //コーヒーメモモード
+  if(strpos($state->{'talkMode'},'coffee_memo_search') !== False){
+    error_log('debag:coffee_memo mode run');
+    coffeeMemoSearch($event,$bot);
+    continue;
+  }
 
 }
 
